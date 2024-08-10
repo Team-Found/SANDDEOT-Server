@@ -3,3 +3,4 @@ fastAPI
 fastapi[standard]
 numpy
 openai
+feedparser

@@ -1,11 +1,17 @@
+#FAST API Import For Set UP
 from typing import Union
 from fastapi import FastAPI
 import time
-from embedModel import embedModel
-
 
 app = FastAPI()
 
+#다른 경로에 있는 모듈 import
+import sys, os
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+
+#모듈 import
+from db import main
+from embedModel import embedModel
 
 @app.get("/")
 def read_root():
@@ -20,3 +26,9 @@ def read_item(any: str):
     end = time.time()
     print("Time taken: ", end - start)
     return {"data": data}
+
+
+@app.get("/sql")
+def test():
+    a = 0;
+    return {"data": a}
