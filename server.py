@@ -1,6 +1,6 @@
 from typing import Union
 from fastapi import FastAPI
-
+import time
 from embedModel import embedModel
 
 
@@ -14,4 +14,9 @@ def read_root():
 
 @app.get("/items/{any}")
 def read_item(any: str):
-    return {"data": embedModel(any)}
+    print("Input: ", any)
+    start = time.time()
+    data = embedModel(any)
+    end = time.time()
+    print("Time taken: ", end - start)
+    return {"data": data}
