@@ -1,0 +1,3 @@
+sentence-transformers
+fastAPI
+"fastapi[standard]"
