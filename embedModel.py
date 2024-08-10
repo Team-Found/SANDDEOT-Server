@@ -1,9 +1,13 @@
 from sentence_transformers import SentenceTransformer
 import numpy as np
-sentences = ["car", "오토바이"]
 
-model = SentenceTransformer('sentence-transformers/LaBSE')
-embeddings = model.encode(sentences)
-print(embeddings)
+def embedModel(source):
+  sentences = ["car", source]
 
-print(np.inner(embeddings[0],embeddings[1]))
+  model = SentenceTransformer('sentence-transformers/LaBSE')
+  embeddings = model.encode(sentences)
+  print(embeddings)
+
+  predict = np.inner(embeddings[0],embeddings[1])
+  print(predict)
+  return float(predict)
