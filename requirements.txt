@@ -2,3 +2,4 @@ sentence-transformers
 fastAPI
 fastapi[standard]
 numpy
+openai
