@@ -2,39 +2,8 @@ import feedparser
 from bs4 import BeautifulSoup
 from domain import findDomain
 from githubImg import findGithubThumbnail
-
-
-def findThumbnail(siteName, entry):
-    if 'media_thumbnail' in entry and entry.media_thumbnail:
-        return entry.media_thumbnail[0].get('url')
-
-    if 'media_content' in entry:
-        for media in entry.media_content:
-            if media.get('type') and 'image' in media['type']:
-                return media.get('url')
-
-    if 'links' in entry:
-        for link in entry.links:
-            if link.rel == 'enclosure' and 'image' in link.type:
-                return link.get('href')
-
-    if 'image' in entry:
-        return entry.image.get('url') or entry.image.get('href')
-
-    if 'content' in entry:
-        soup = BeautifulSoup(entry.content[0].value, 'html.parser')
-        img_tag = soup.find('img')
-        if img_tag and 'src' in img_tag.attrs:
-            return img_tag['src']
-
-    return None
-
-
-def htmlToPlaintext(html_content):
-    soup = BeautifulSoup(html_content, 'html.parser')
-    plaintext = soup.get_text()
-    
-    return plaintext
+from findThumbnail import findImgList
+from htmlToPlaintext import htmlToPlaintext
 
 
 target_feeds = {
@@ -93,7 +62,7 @@ for index, (siteName, url) in enumerate(target_feeds.items()):
       if siteName == 'The GitHub Blog': #github-blog만 특별히 썸네일 추출
         thumbnail = findGithubThumbnail(writingUrl)
       else:
-        thumbnail =  findThumbnail(siteName,entry)
+        thumbnail =  findImgList(siteName,entry)
       
       published = entry.get('published', 'No publish date found')
       if published == 'No publish date found':
