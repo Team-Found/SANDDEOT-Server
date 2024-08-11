@@ -11,7 +11,7 @@ sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
 #모듈 import
 from db import main
-from embedModel import embedModel
+from embed.embedModel import embedModel
 
 @app.get("/")
 def read_root():

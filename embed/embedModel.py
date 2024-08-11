@@ -13,3 +13,5 @@ def embedModel(source):
     predict = np.inner(embeddings[0], embeddings[1])
     print(predict)
     return float(predict)
+
+#유사도 비교

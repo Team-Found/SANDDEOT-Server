@@ -45,14 +45,14 @@ for index, (siteName, url) in enumerate(target_feeds.items()):
     print('사이트이름' + siteName)
 
     for entry in feed.entries:
-      # print(entry.guid) #RSSArticleID
-      # print("Title:", entry.title) #글이름
+      print(entry.guid) #RSSArticleID
+      print("Title:", entry.title) #글이름
 
       if 'description' in entry:
         description = entry.description
       elif 'summary' in entry:
         description = entry.summary
-      # print("desc:", htmlToPlaintext(description))
+      print("desc:", htmlToPlaintext(description))
 
 
       writingUrl = entry.link #글 링크
@@ -68,12 +68,8 @@ for index, (siteName, url) in enumerate(target_feeds.items()):
           from time import strftime
           published = strftime('%Y-%m-%d %H:%M:%S', published_parsed)
   
-      # print("Published Date:", published)
-      # try:
-      # print("Published:", entry.published)
-      # except:
-      #   None
+      try:
+        print("Published:", entry.published)
+      except:
+          pass
       print()
-
-    #   # print(entry.description)
-    #   # print("Content:", entry.content)
