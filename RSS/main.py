@@ -1,5 +1,7 @@
 import feedparser
 from bs4 import BeautifulSoup
+
+
 from findDomain import findDomain
 from findImgList import findImgList
 from htmlToPlaintext import htmlToPlaintext
@@ -36,33 +38,26 @@ for url in target_feeds.values():
 
     # 파비콘을 추출하는 코드
     if 'image' in feed.feed:
-        print(feed.feed.image.href)
+        favicon = feed.feed.image.href
     else:
-        print(findDomain(rss_url)+'/favicon.ico')
+        favicon = findDomain(rss_url)+'/favicon.ico'
 
     # 사이트 이름 추출
     siteName = feed.feed.title
-    print('사이트이름' + siteName)
+    site_url = feed.feed.link
 
     for entry in feed.entries:
-        print(entry.guid)  # RSSArticleID
-        print("Title:", entry.title)  # 글이름
-
+        title = entry.title
         if 'description' in entry:
             description = entry.description
         elif 'summary' in entry:
             description = entry.summary
 
         description = ' '.join(str(htmlToPlaintext(description)).split()[:40])
-        print(description)
-
-        # print("desc:", htmlToPlaintext(description))
-
+        
         writingUrl = entry.link  # 글 링크
-        print('글링크' + writingUrl)
 
-        thumbnail = findImgList(siteName, entry)
-        print(f"썸네일 {thumbnail}")
+        thumbnail = findImgList(siteName, entry) #썸네일과 이미지list 추출
 
         published = entry.get('published', 'No publish date found')
         if published == 'No publish date found':
@@ -71,8 +66,6 @@ for url in target_feeds.values():
             from time import strftime
             published = strftime('%Y-%m-%d %H:%M:%S', published_parsed)
 
-        try:
-            print("Published:", entry.published)
-        except:
-            pass
-        print()
+        published = None
+        if 'published' in entry:
+            published = entry.published

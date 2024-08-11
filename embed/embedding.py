@@ -3,5 +3,5 @@ import numpy as np
 
 model = SentenceTransformer("sentence-transformers/LaBSE")
 
-def embedding():
-  model.encode("hello")
+def embedding(text):
+  return model.encode(text)

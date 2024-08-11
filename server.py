@@ -1,17 +1,26 @@
 #FAST API Import For Set UP
 from typing import Union
-from fastapi import FastAPI
+from typing import Optional
+from fastapi import FastAPI, Depends, HTTPException
+from pydantic import BaseModel
 import time
-
-app = FastAPI()
+import sqlite3
 
 #다른 경로에 있는 모듈 import
 import sys, os
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
 #모듈 import
-from db import main
 from embed.embedModel import embedModel
+from db.modules.AddRSS import addRSS
+from db.db import get_db
+
+# 데이터베이스 연결
+conn = sqlite3.connect('/Users/asdf/Documents/Project_Unit/sanddeot/SANDDEOT-Server/db/server.db')
+db = conn.cursor()
+
+app = FastAPI()
+
 
 @app.get("/")
 def read_root():
@@ -28,7 +37,12 @@ def read_item(any: str):
     return {"data": data}
 
 
-@app.get("/sql")
-def test():
-    a = 0;
-    return {"data": a}
+# class FindDomain(BaseModel):
+#     name: str
+
+@app.get("/insert/rss/")
+def insertRSSdomain(domain: Optional[str] = None, db: sqlite3.Cursor = Depends(get_db)):
+    if domain:
+        return addRSS(domain, db)
+    else:
+        return {"error": "No domain provided"}

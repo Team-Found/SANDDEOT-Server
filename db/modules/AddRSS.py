@@ -1,57 +1,54 @@
-#다른 경로에 있는 모듈 import
-import sys, os
-sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
-
-from db.main import db
-
-import feedparser
 from bs4 import BeautifulSoup
-from ...RSS.findDomain import findDomain
-from ...RSS.findImgList import findImgList
-from ...RSS.htmlToPlaintext import htmlToPlaintext
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# db_modules/add_rss.py
+import json
+import feedparser
+import sqlite3
+from typing import Dict
+from fastapi import HTTPException
+from RSS.findDomain import findDomain
+from RSS.findImgList import findImgList
+from RSS.htmlToPlaintext import htmlToPlaintext
+from embed.embedding import embedding
 
+def addRSS(url: str, db: sqlite3.Cursor) -> Dict[str, str]:
+    # try:
+    #TODO: 이미있는 사이트는 받지않기
+    # 없으면 반환
+    # 도메인 부족해도 채워주기
 
-
-for url in target_feeds.values():
-    rss_url = url
-    feed = feedparser.parse(rss_url)
-
-    # 파비콘을 추출하는 코드
+    feed = feedparser.parse(url)
+    
+    # 파비콘 추출
     if 'image' in feed.feed:
-      print(feed.feed.image.href)
+        favicon = feed.feed.image.href
     else:
-      print(findDomain(rss_url)+'favicon.ico')
-
-    # 사이트 이름 추출
+        favicon = findDomain(url) + '/favicon.ico'
+    
+    # 사이트 이름과 URL 추출
     siteName = feed.feed.title
-    print('사이트이름' + siteName)
+    siteUrl = feed.feed.link
 
     for entry in feed.entries:
-      print(entry.guid) #RSSArticleID
-      print("Title:", entry.title) #글이름
+        title = entry.title
+        description = entry.description if 'description' in entry else entry.summary
+        description = ' '.join(str(htmlToPlaintext(description)).split()[:40])
 
-      if 'description' in entry:
-        description = entry.description
-      elif 'summary' in entry:
-        description = entry.summary
-      print("desc:", htmlToPlaintext(description))
+        writingUrl = entry.link  # 글 링크
+        thumbnail = findImgList(siteName, entry)  # 썸네일과 이미지 리스트 추출
+        published = entry.published if 'published' in entry else None
 
+        db.execute("""
+            INSERT INTO RSS (
+                title, descript, date, siteName, siteUrl, thumbnail, imgList, titleEb, descriptEb
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (
+            title, description, published, siteName, siteUrl, thumbnail["thumbnail"], json.dumps(thumbnail["imgList"]), embedding(title), embedding(description)
+        ))
+        db.connection.commit()  # 변경 사항을 데이터베이스에 저장
 
-      writingUrl = entry.link #글 링크
-      print('글링크' +writingUrl)
-
-      thumbnail = findImgList(siteName,entry)
-      print(f"썸네일 {thumbnail}")
-
-      published = entry.get('published', 'No publish date found')
-      if published == 'No publish date found':
-        published_parsed = entry.get('published_parsed', None)
-      if published_parsed:
-          from time import strftime
-          published = strftime('%Y-%m-%d %H:%M:%S', published_parsed)
-  
-      try:
-        print("Published:", entry.published)
-      except:
-          pass
-      print()
+    return {"siteName": siteName, "siteFavicon": favicon, "title": title, "description": description}
+    # except Exception as e:
+    #     raise HTTPException(status_code=500, detail=f"Database error: {e}")
