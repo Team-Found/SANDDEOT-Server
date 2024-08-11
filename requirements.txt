@@ -4,3 +4,4 @@ fastapi[standard]
 numpy
 openai
 feedparser
+beautifulsoup
