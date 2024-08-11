@@ -1,6 +1,6 @@
 import feedparser
 from bs4 import BeautifulSoup
-from domain import findDomain
+from findDomain import findDomain
 from findImgList import findImgList
 from htmlToPlaintext import htmlToPlaintext
 
@@ -30,7 +30,7 @@ target_feeds = {
 }
 
 
-for index, (siteName, url) in enumerate(target_feeds.items()):
+for url in target_feeds.values():
     rss_url = url
     feed = feedparser.parse(rss_url)
 
@@ -38,7 +38,7 @@ for index, (siteName, url) in enumerate(target_feeds.items()):
     if 'image' in feed.feed:
       print(feed.feed.image.href)
     else:
-      print(findDomain(rss_url)+'favicon.ico')
+      print(findDomain(rss_url)+'/favicon.ico')
 
     # 사이트 이름 추출
     siteName = feed.feed.title
