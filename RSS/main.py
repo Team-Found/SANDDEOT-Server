@@ -1,8 +1,7 @@
 import feedparser
 from bs4 import BeautifulSoup
 from domain import findDomain
-from githubImg import findGithubThumbnail
-from findThumbnail import findImgList
+from findImgList import findImgList
 from htmlToPlaintext import htmlToPlaintext
 
 
@@ -46,24 +45,22 @@ for index, (siteName, url) in enumerate(target_feeds.items()):
     print('사이트이름' + siteName)
 
     for entry in feed.entries:
-      print(entry.guid) #RSSArticleID
-      print("Title:", entry.title) #글이름
+      # print(entry.guid) #RSSArticleID
+      # print("Title:", entry.title) #글이름
 
       if 'description' in entry:
         description = entry.description
       elif 'summary' in entry:
         description = entry.summary
-      print("desc:", htmlToPlaintext(description))
+      # print("desc:", htmlToPlaintext(description))
 
 
       writingUrl = entry.link #글 링크
       print('글링크' +writingUrl)
 
-      if siteName == 'The GitHub Blog': #github-blog만 특별히 썸네일 추출
-        thumbnail = findGithubThumbnail(writingUrl)
-      else:
-        thumbnail =  findImgList(siteName,entry)
-      
+      thumbnail = findImgList(siteName,entry)
+      print(f"썸네일 {thumbnail}")
+
       published = entry.get('published', 'No publish date found')
       if published == 'No publish date found':
         published_parsed = entry.get('published_parsed', None)
@@ -71,7 +68,7 @@ for index, (siteName, url) in enumerate(target_feeds.items()):
           from time import strftime
           published = strftime('%Y-%m-%d %H:%M:%S', published_parsed)
   
-      print("Published Date:", published)
+      # print("Published Date:", published)
       # try:
       # print("Published:", entry.published)
       # except:
