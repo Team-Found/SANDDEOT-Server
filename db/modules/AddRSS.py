@@ -40,7 +40,7 @@ async def addRSS(url: str, db: sqlite3.Cursor) -> Dict[str, str]:
     siteID = siteID.fetchall()
 
     if len(siteID):
-      return {"status": "success", "pk": siteID[0][0]}
+      return {"status": "success", "pk": siteID[0][0], "message": "already created"}
     else:
       db.execute("""INSERT INTO site (siteName,siteUrl,favicon) VALUES (?, ?, ?)""",(siteName,url,favicon))
       db.connection.commit()  # 변경 사항을 데이터베이스에 저장
@@ -68,6 +68,6 @@ async def addRSS(url: str, db: sqlite3.Cursor) -> Dict[str, str]:
       ))
       db.connection.commit()  # 변경 사항을 데이터베이스에 저장
 
-    return {"status": "success", "pk": siteID[0][0]}
+    return {"status": "success", "pk": siteID[0][0], "message": "new created"}
   # except Exception as e:
   #     return {"status": "error", "message": str(e)}
