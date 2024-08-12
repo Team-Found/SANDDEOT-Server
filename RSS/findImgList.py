@@ -2,7 +2,9 @@ from bs4 import BeautifulSoup
 from RSS.githubImg import findGithubThumbnail
 from RSS.findThumbnail import findThumbnail
 
-def findImgList(siteName, entry):
+import asyncio
+
+async def findImgList(siteName, entry):
     if siteName == 'The GitHub Blog': #github-blog만 특별히 썸네일 추출
         thumbnail = findGithubThumbnail(entry.link)
     else:

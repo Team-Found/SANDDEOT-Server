@@ -3,5 +3,7 @@ import numpy as np
 
 model = SentenceTransformer("sentence-transformers/LaBSE")
 
-def embedding(text):
+import asyncio
+
+async def embedding(text):
   return model.encode(text)

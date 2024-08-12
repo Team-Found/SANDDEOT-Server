@@ -5,6 +5,7 @@ from fastapi import FastAPI, Depends, HTTPException
 from pydantic import BaseModel
 import time
 import sqlite3
+import asyncio
 
 #다른 경로에 있는 모듈 import
 import sys, os
@@ -41,8 +42,8 @@ def read_item(any: str):
 #     name: str
 
 @app.get("/insert/rss/")
-def insertRSSdomain(domain: Optional[str] = None, db: sqlite3.Cursor = Depends(get_db)):
+async def insert_rss_domain(domain: Optional[str] = None, db: sqlite3.Cursor = Depends(get_db)):
     if domain:
-        return addRSS(domain, db)
+        return await addRSS(domain, db)
     else:
-        return {"error": "No domain provided"}
+        raise HTTPException(status_code=400, detail="No domain provided")
