@@ -6,4 +6,4 @@ model = SentenceTransformer("sentence-transformers/LaBSE")
 import asyncio
 
 async def embedding(text):
-  return model.encode(text)
+  return (model.encode(text))

@@ -9,6 +9,7 @@ import asyncio
 from embed.embedModel import embedModel
 from db.modules.AddRSS import addRSS
 from db.db import get_db
+from db.modules.search import searchSimilar
 
 #다른 경로에 있는 모듈 import
 import sys, os
@@ -44,3 +45,8 @@ async def insert_rss_domain(domain: Optional[str] = None, db: sqlite3.Cursor = D
         return await addRSS(domain, db)
     else:
         raise HTTPException(status_code=400, detail="No domain provided")
+
+@app.get("/search/rss/")
+async def search_rss(target:str, db: sqlite3.Cursor = Depends(get_db)):
+    if target:
+        return await searchSimilar(target, db)

@@ -1,10 +1,10 @@
 import sqlite3
-import os
+import sys, os
+from embed.embedModel import embedModel
 
-conn = sqlite3.connect(os.path.abspath('db/server.db'))
-db = conn.cursor()
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
-settingData = db.execute("""select rssID, titleEb, descriptEb from RSS""")
-settingData = settingData.fetchall()
-print(settingData[0][1])
-# async def searchSimilar(target: list[str]): #, db: sqlite3.Cursor
+async def searchSimilar(target:str ,db): #, db: sqlite3.Cursor
+  settingData = db.execute("""select rssID, titleEb, descriptEb from RSS LIMIT 10""")
+  settingData = settingData.fetchall()
+  return await embedModel(target,settingData,4)
