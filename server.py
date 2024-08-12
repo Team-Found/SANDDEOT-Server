@@ -6,18 +6,15 @@ from pydantic import BaseModel
 import time
 import sqlite3
 import asyncio
+from embed.embedModel import embedModel
+from db.modules.AddRSS import addRSS
+from db.db import get_db
 
 #다른 경로에 있는 모듈 import
 import sys, os
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
-#모듈 import
-from embed.embedModel import embedModel
-from db.modules.AddRSS import addRSS
-from db.db import get_db
-
-# 데이터베이스 연결
-conn = sqlite3.connect('/root/SANDDEOT-Server/db/server.db')
+conn = sqlite3.connect(os.path.abspath('db/server.db'))
 db = conn.cursor()
 
 app = FastAPI()
