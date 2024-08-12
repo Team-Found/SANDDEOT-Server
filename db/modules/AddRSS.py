@@ -58,13 +58,16 @@ async def addRSS(url: str, db: sqlite3.Cursor) -> Dict[str, str]:
       thumbnail = await findImgList(siteName, entry)  # 썸네일과 이미지 리스트 추출
       published = entry.published if 'published' in entry else None
 
+      content = None
+      if 'content' in entry:
+        content = entry.content[0]["value"]
       # 동기적으로 데이터베이스에 삽입
       db.execute("""
           INSERT INTO RSS (
               title, descript, date, thumbnail, imgList, titleEb, descriptEb, siteID, content, link
           ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?)
       """, (
-          title, description, published,thumbnail["thumbnail"], json.dumps(thumbnail["imgList"]), await embedding(title), await embedding(description), int(siteID[0][0]), entry.content[0]["value"], writingUrl
+          title, description, published,thumbnail["thumbnail"], json.dumps(thumbnail["imgList"]), await embedding(title), await embedding(description), int(siteID[0][0]), content, writingUrl
       ))
       db.connection.commit()  # 변경 사항을 데이터베이스에 저장
 
