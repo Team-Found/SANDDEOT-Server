@@ -17,7 +17,7 @@ from db.modules.AddRSS import addRSS
 from db.db import get_db
 
 # 데이터베이스 연결
-conn = sqlite3.connect('/root/SANDDEOT-Server/db/db.py')
+conn = sqlite3.connect('/root/SANDDEOT-Server/db/server.db')
 db = conn.cursor()
 
 app = FastAPI()
