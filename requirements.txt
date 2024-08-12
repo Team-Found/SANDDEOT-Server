@@ -8,3 +8,4 @@ beautifulsoup
 beautifulsoup4
 requests
 aiohttp
+aiosqlite

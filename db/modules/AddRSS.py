@@ -3,6 +3,7 @@ from RSS.htmlToPlaintext import htmlToPlaintext
 from RSS.findImgList import findImgList
 from RSS.findDomain import findDomain
 import aiohttp  # 비동기 HTTP 클라이언트
+import aiosqlite
 from fastapi import HTTPException
 from typing import Dict
 import sqlite3
@@ -39,14 +40,14 @@ async def addRSS(url: str, db: sqlite3.Cursor) -> Dict[str, str]:
     siteID = siteID.fetchall()
 
     if len(siteID):
-      return {"status": "success", "pk": siteID}
+      return {"status": "success", "pk": siteID[0][0]}
     else:
       db.execute("""INSERT INTO site (siteName,siteUrl,favicon) VALUES (?, ?, ?)""",(siteName,url,favicon))
       db.connection.commit()  # 변경 사항을 데이터베이스에 저장
       siteID = db.execute("""SELECT siteID FROM site WHERE siteUrl = ?""",(url,))
       siteID = siteID.fetchall()
     
-    print(siteID)
+    # print(siteID)
 
     for entry in feed.entries:
       title = entry.title
@@ -67,6 +68,6 @@ async def addRSS(url: str, db: sqlite3.Cursor) -> Dict[str, str]:
       ))
       db.connection.commit()  # 변경 사항을 데이터베이스에 저장
 
-    return {"status": "success", "domain": url}
+    return {"status": "success", "pk": siteID[0][0]}
   # except Exception as e:
   #     return {"status": "error", "message": str(e)}
