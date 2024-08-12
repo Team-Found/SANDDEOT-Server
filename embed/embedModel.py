@@ -16,4 +16,4 @@ async def embedModel(target, source,ranged):
     titleEb = np.frombuffer(io.BytesIO(titleEb).getvalue(), dtype=np.float32)
     descriptEb = np.frombuffer(io.BytesIO(descriptEb).getvalue(), dtype=np.float32)
     ebData.append([rssID, float(np.inner(targetEb, titleEb))+ float(np.inner(targetEb, descriptEb))])
-  return json.dumps(sorted(ebData, key=lambda x: x[1],reverse=True)[:ranged])
+  return sorted(ebData, key=lambda x: x[1],reverse=True)[:ranged]

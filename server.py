@@ -39,14 +39,14 @@ def read_item(any: str):
 # class FindDomain(BaseModel):
 #     name: str
 
-@app.get("/insert/rss/")
+@app.get("/rss/add/")
 async def insert_rss_domain(domain: Optional[str] = None, db: sqlite3.Cursor = Depends(get_db)):
     if domain:
         return await addRSS(domain, db)
     else:
         raise HTTPException(status_code=400, detail="No domain provided")
 
-@app.get("/search/rss/")
+@app.get("/article/search/")
 async def search_rss(target:str, db: sqlite3.Cursor = Depends(get_db)):
     if target:
         return await searchSimilar(target, db)
