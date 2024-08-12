@@ -61,10 +61,10 @@ async def addRSS(url: str, db: sqlite3.Cursor) -> Dict[str, str]:
       # 동기적으로 데이터베이스에 삽입
       db.execute("""
           INSERT INTO RSS (
-              title, descript, date, thumbnail, imgList, titleEb, descriptEb, siteID
-          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+              title, descript, date, thumbnail, imgList, titleEb, descriptEb, siteID, content
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
       """, (
-          title, description, published,thumbnail["thumbnail"], json.dumps(thumbnail["imgList"]), await embedding(title), await embedding(description), int(siteID[0][0])
+          title, description, published,thumbnail["thumbnail"], json.dumps(thumbnail["imgList"]), await embedding(title), await embedding(description), int(siteID[0][0]), entry.content[0]["value"]
       ))
       db.connection.commit()  # 변경 사항을 데이터베이스에 저장
 
