@@ -1,21 +1,31 @@
 import os
 from dotenv import load_dotenv
+import openai
 
-# .env 파일에서 환경 변수 로드
 load_dotenv()
 
-# 환경 변수에서 API 키 가져오기
-openai_api_key = os.getenv("OPENAI_API_KEY")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+openai.api_key = OPENAI_API_KEY
+model = "gpt-3.5-turbo"
 
-# API 키를 사용하여 OpenAI 설정
-import openai
-openai.api_key = openai_api_key
+query = "텍스트를 이미지로 그려주는 모델에 대해 알려줘."
 
-# 테스트로 간단한 API 요청
-response = openai.Completion.create(
-    engine="text-davinci-003",
-    prompt="What is AI?",
-    max_tokens=50
+messages = [
+    {
+        "role": "system",
+        "content": "You are a helpful assistant."
+    },
+    {
+        "role": "user",
+        "content": query
+    }
+]
+
+response = openai.ChatCompletion.create(
+    model=model,
+    messages=messages,
+    max_tokens=100  # 응답 길이를 적절히 설정하세요.
 )
 
-print(response.choices[0].text.strip())
+# 응답 출력
+print(response.choices[0].message["content"])
