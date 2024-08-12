@@ -2,7 +2,7 @@
 import sqlite3
 from typing import Generator
 
-DATABASE_URL = '/Users/asdf/Documents/Project_Unit/sanddeot/SANDDEOT-Server/db/server.db'
+DATABASE_URL = '/root/SANDDEOT-Server/db/db.py'
 
 def get_db() -> Generator[sqlite3.Cursor, None, None]:
     conn = sqlite3.connect(DATABASE_URL, check_same_thread=False)
