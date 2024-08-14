@@ -1,5 +1,5 @@
 #FAST API Import For Set UP
-from typing import Union
+from typing import List
 from typing import Optional
 from fastapi import FastAPI, Depends, HTTPException
 from pydantic import BaseModel
@@ -10,6 +10,7 @@ from embed.embedModel import embedModel
 from db.modules.AddRSS import addRSS
 from db.db import get_db
 from db.modules.search import searchSimilar
+from recommend.recommend import recommend
 
 #다른 경로에 있는 모듈 import
 import sys, os
@@ -36,8 +37,7 @@ def read_item(any: str):
     return {"data": data}
 
 
-# class FindDomain(BaseModel):
-#     name: str
+
 
 @app.get("/rss/add/")
 async def insert_rss_domain(domain: Optional[str] = None, db: sqlite3.Cursor = Depends(get_db)):
@@ -50,3 +50,11 @@ async def insert_rss_domain(domain: Optional[str] = None, db: sqlite3.Cursor = D
 async def search_rss(target:str, db: sqlite3.Cursor = Depends(get_db),quantity:int = 4):
     if target:
         return await searchSimilar(target, db, quantity)
+
+class RecommendData(BaseModel):
+    data : List[int]
+    quantity : int
+
+@app.post("/article/recommend/")
+async def search_rss(item: RecommendData, db: sqlite3.Cursor = Depends(get_db)):
+    return await recommend(item.data, db, item.quantity)
