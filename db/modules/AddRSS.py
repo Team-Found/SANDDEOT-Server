@@ -36,15 +36,20 @@ async def addRSS(url: str, db: sqlite3.Cursor) -> Dict[str, str]:
     except:
       return {"status": "error", "message": "올바른 링크가 아닙니다"}
     
-    siteID = db.execute("""SELECT siteID FROM site WHERE siteUrl = ?""",(url,))
+    siteID = db.execute("""SELECT * FROM site WHERE siteUrl = ?""",(url,))
     siteID = siteID.fetchall()
 
     if len(siteID):
-      return {"status": "success", "pk": siteID[0][0], "message": "already created"}
+      return {"status": "success", 
+              "siteID": siteID[0][0], 
+              "siteName": siteID[0][1], 
+              "sitUrl": siteID[0][2], 
+              "favicon": siteID[0][3], 
+              "message": "already created"}
     else:
       db.execute("""INSERT INTO site (siteName,siteUrl,favicon) VALUES (?, ?, ?)""",(siteName,url,favicon))
       db.connection.commit()  # 변경 사항을 데이터베이스에 저장
-      siteID = db.execute("""SELECT siteID FROM site WHERE siteUrl = ?""",(url,))
+      siteID = db.execute("""SELECT * FROM site WHERE siteUrl = ?""",(url,))
       siteID = siteID.fetchall()
     
     # print(siteID)
@@ -71,6 +76,11 @@ async def addRSS(url: str, db: sqlite3.Cursor) -> Dict[str, str]:
       ))
       db.connection.commit()  # 변경 사항을 데이터베이스에 저장
 
-    return {"status": "success", "pk": siteID[0][0], "message": "new created"}
+    return {"status": "success", 
+            "siteID": siteID[0][0], 
+            "siteName": siteID[0][1], 
+            "sitUrl": siteID[0][2], 
+            "favicon": siteID[0][3], 
+            "message": "new created"}
   # except Exception as e:
   #     return {"status": "error", "message": str(e)}
