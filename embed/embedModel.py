@@ -1,10 +1,10 @@
 from sentence_transformers import SentenceTransformer
+from embed.similarity import similarity
 import numpy as np
 import json
 import io
 
 model = SentenceTransformer("sentence-transformers/LaBSE")
-
 
 #target = 검색내용
 #source = DB에 준비된 Data
@@ -15,5 +15,5 @@ async def embedModel(target, source,ranged):
   for index,(rssID, titleEb, descriptEb) in enumerate(source):
     titleEb = np.frombuffer(io.BytesIO(titleEb).getvalue(), dtype=np.float32)
     descriptEb = np.frombuffer(io.BytesIO(descriptEb).getvalue(), dtype=np.float32)
-    ebData.append([rssID, float(np.inner(targetEb, titleEb))+ float(np.inner(targetEb, descriptEb))])
+    ebData.append([rssID, await similarity(targetEb, titleEb)+ await similarity(targetEb, descriptEb)])
   return sorted(ebData, key=lambda x: x[1],reverse=True)[:ranged]
