@@ -32,27 +32,27 @@ async def addRSS(url: str, db: sqlite3.Cursor) -> Dict[str, str]:
     # 사이트 이름과 URL 추출
     
     try:
-      siteName = feed.feed.title
+      rssName = feed.feed.title
     except:
       return {"status": "error", "message": "올바른 링크가 아닙니다"}
     
-    siteID = db.execute("""SELECT * FROM site WHERE siteUrl = ?""",(url,))
-    siteID = siteID.fetchall()
+    rssID = db.execute("""SELECT * FROM rss WHERE rssUrl = ?""",(url,))
+    rssID = rssID.fetchall()
 
-    if len(siteID):
+    if len(rssID):
       return {"status": "success", 
-              "siteID": siteID[0][0], 
-              "siteName": siteID[0][1], 
-              "sitUrl": siteID[0][2], 
-              "favicon": siteID[0][3], 
+              "rssID": rssID[0][0], 
+              "rssName": rssID[0][1], 
+              "rssUrl": rssID[0][2], 
+              "favicon": rssID[0][3], 
               "message": "already created"}
     else:
-      db.execute("""INSERT INTO site (siteName,siteUrl,favicon) VALUES (?, ?, ?)""",(siteName,url,favicon))
+      db.execute("""INSERT INTO rss (rssName,rssUrl,favicon) VALUES (?, ?, ?)""",(rssName,url,favicon))
       db.connection.commit()  # 변경 사항을 데이터베이스에 저장
-      siteID = db.execute("""SELECT * FROM site WHERE siteUrl = ?""",(url,))
-      siteID = siteID.fetchall()
+      rssID = db.execute("""SELECT * FROM rss WHERE rssUrl = ?""",(url,))
+      rssID = rssID.fetchall()
     
-    # print(siteID)
+    # print(rssID)
 
     for entry in feed.entries:
       title = entry.title
@@ -60,7 +60,7 @@ async def addRSS(url: str, db: sqlite3.Cursor) -> Dict[str, str]:
       description = ' '.join(str(await htmlToPlaintext(description)).split()[:40])
 
       writingUrl = entry.link  # 글 링크
-      thumbnail = await findImgList(siteName, entry)  # 썸네일과 이미지 리스트 추출
+      thumbnail = await findImgList(rssName, entry)  # 썸네일과 이미지 리스트 추출
       published = entry.published if 'published' in entry else None
 
       content = None
@@ -68,19 +68,19 @@ async def addRSS(url: str, db: sqlite3.Cursor) -> Dict[str, str]:
         content = entry.content[0]["value"]
       # 동기적으로 데이터베이스에 삽입
       db.execute("""
-          INSERT INTO RSS (
-              title, descript, date, thumbnail, imgList, titleEb, descriptEb, siteID, content, link, saved
+          INSERT INTO article (
+              title, descript, date, thumbnail, imgList, titleEb, descriptEb, rssID, content, link, saved
           ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       """, (
-          title, description, published,thumbnail["thumbnail"], json.dumps(thumbnail["imgList"]), await embedding(title), await embedding(description), int(siteID[0][0]), content, writingUrl, 0
+          title, description, published,thumbnail["thumbnail"], json.dumps(thumbnail["imgList"]), await embedding(title), await embedding(description), int(rssID[0][0]), content, writingUrl, 0
       ))
       db.connection.commit()  # 변경 사항을 데이터베이스에 저장
 
     return {"status": "success", 
-            "siteID": siteID[0][0], 
-            "siteName": siteID[0][1], 
-            "sitUrl": siteID[0][2], 
-            "favicon": siteID[0][3], 
+            "rssID": rssID[0][0], 
+            "rssName": rssID[0][1], 
+            "rssUrl": rssID[0][2], 
+            "favicon": rssID[0][3], 
             "message": "new created"}
   # except Exception as e:
   #     return {"status": "error", "message": str(e)}
