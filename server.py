@@ -47,6 +47,6 @@ async def insert_rss_domain(domain: Optional[str] = None, db: sqlite3.Cursor = D
         raise HTTPException(status_code=400, detail="No domain provided")
 
 @app.get("/article/search/")
-async def search_rss(target:str, db: sqlite3.Cursor = Depends(get_db)):
+async def search_rss(target:str, db: sqlite3.Cursor = Depends(get_db),quantity:int = 4):
     if target:
-        return await searchSimilar(target, db)
+        return await searchSimilar(target, db, quantity)

@@ -5,10 +5,10 @@ import json
 
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
-async def searchSimilar(target:str ,db): #, db: sqlite3.Cursor
+async def searchSimilar(target:str ,db, quantity): #, db: sqlite3.Cursor
   settingData = db.execute("""select rssID, titleEb, descriptEb from RSS""")
   settingData = settingData.fetchall()
-  result = await embedModel(target,settingData,4)
+  result = await embedModel(target,settingData, quantity)
 
   articleData = db.execute(f"""select  s.siteID, s.siteName, siteUrl, favicon, rssID ,title, descript, date, thumbnail, imgList, content, link 
                           from RSS r, site s where rssID in ({','.join(map(str,[item[0] for item in result]))}) and r.siteID = s.siteID""")
