@@ -32,14 +32,11 @@ async def recommend(data, db, quantity):
         ebData[index2][1] += recommend
 
   ebData = sorted(ebData, key=lambda x: x[1],reverse=True)
-  return ebData
-  #임베딩값 삭제
-  print(ebData[i])
 
-  #관계유사도 순으로 정렬 *관계유사도 : 각 데이터끼리 유사도를 돌린 각각의 합
-  # settingData = db.execute("""select articleID, titleEb, descriptEb from article""")
-  # settingData = settingData.fetchall()
+  # 관계유사도 순으로 정렬 *관계유사도 : 각 데이터끼리 유사도를 돌린 각각의 합
+  settingData = db.execute("""select articleID, titleEb, descriptEb from article""").fetchall()
 
+  # return embedModel(titleEbList(ebData[0][2]))
   # for i in range(len(ebData)):
   #   ranged = int((ebData[i][2]/sumSimilar)*100) #관계유사도에 따른 피드수 
   #    ranged *= (len(ebData) - i) #가중치
