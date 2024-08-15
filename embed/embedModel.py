@@ -42,4 +42,4 @@ async def embedModel(db, targetEb, source, ranged, targetDescriptEb = None):
     articles_json_list.append(article_data)
 
 
-  return json.dumps(articles_json_list)
+  return articles_json_list
