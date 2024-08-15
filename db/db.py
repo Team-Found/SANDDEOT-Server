@@ -4,10 +4,11 @@ import os
 from typing import Generator
 
 
-DATABASE_URL = os.path.abspath('db/server.db')
+DATABASE_URL = os.path.abspath("db/server.db")
+
 
 def get_db() -> Generator[sqlite3.Cursor, None, None]:
-    conn = sqlite3.connect(DATABASE_URL, check_same_thread=False)
+    conn = sqlite3.connect(DATABASE_URL, check_same_thread=False, timeout=10)
     try:
         yield conn.cursor()
     finally:

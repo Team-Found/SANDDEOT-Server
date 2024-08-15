@@ -12,6 +12,8 @@ from db.db import get_db
 from db.modules.search import searchSimilar
 from recommend.recommend import recommend
 
+from db.modules.newArticles import insertNewArticles
+
 # 다른 경로에 있는 모듈 import
 import sys, os
 
@@ -46,6 +48,33 @@ async def insert_rss_domain(
         return await addRSS(domain, db)
     else:
         raise HTTPException(status_code=400, detail="No domain provided")
+
+
+class NewArticle(BaseModel):
+    articleID: Optional[int] = None
+    rssID: int
+    title: str
+    description: Optional[str] = None
+    summary: Optional[str] = None
+    date: int  # unix timestamp
+    content: List[dict]
+    link: str
+    media_thumbnail: Optional[str] = None
+    published_parsed: Optional[time.struct_time] = None  # 선택적 속성 추가
+
+
+class NewArticles(BaseModel):
+    data: List[NewArticle]
+
+
+@app.post("/article/newArticles/")
+async def insert_new_articles(
+    articles: NewArticles, db: sqlite3.Cursor = Depends(get_db)
+):
+    if articles:
+        return await insertNewArticles(articles, db)
+    else:
+        raise HTTPException(status_code=400, detail="No articles provided")
 
 
 @app.get("/article/search/")

@@ -98,21 +98,24 @@ async def addRSS(url: str, db: sqlite3.Cursor) -> Dict[str, str]:
 
 
 async def insertRssArticle(entry, rssID: int, rssName: str = None):
-    db_gen = get_db()
-    db = next(db_gen)
+    # print(entry)
     title = entry.title
-    description = entry.description if "description" in entry else entry.summary
+    # print(title)
+    # print(entry.description)
+    description = entry.description if entry.description is not None else entry.summary
     description = " ".join(str(await htmlToPlaintext(description)).split()[:40])
     if description == None:
         description = title
 
     writingUrl = entry.link  # 글 링크
     thumbnail = await findImgList(rssName, entry)  # 썸네일과 이미지 리스트 추출
-    published = entry.published_parsed if "published_parsed" in entry else None
-    # print(published)
+    published = entry.published_parsed if entry.published_parsed is not None else None
+    print(published)
     content = None
-    if "content" in entry:
+    if entry.content is not None:
         content = entry.content[0]["value"]
+    db_gen = get_db()
+    db = next(db_gen)
     # 동기적으로 데이터베이스에 삽입
     db.execute(
         """
