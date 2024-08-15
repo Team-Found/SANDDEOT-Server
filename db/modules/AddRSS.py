@@ -58,6 +58,8 @@ async def addRSS(url: str, db: sqlite3.Cursor) -> Dict[str, str]:
       title = entry.title
       description = entry.description if 'description' in entry else entry.summary
       description = ' '.join(str(await htmlToPlaintext(description)).split()[:40])
+      if description == None:
+        description = title
 
       writingUrl = entry.link  # 글 링크
       thumbnail = await findImgList(rssName, entry)  # 썸네일과 이미지 리스트 추출
