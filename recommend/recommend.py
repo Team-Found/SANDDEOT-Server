@@ -10,7 +10,6 @@ async def recommend(data, db, quantity):
     result = db.execute("""SELECT titleEb, descriptEb FROM article WHERE articleID = ?""",[rssID]).fetchone()
     ebData.append([rssID, result[0], result[1], 0])
 
-
   sumSimilar = 0
 
   titleEbList = []
@@ -31,10 +30,14 @@ async def recommend(data, db, quantity):
         ebData[index][1] += recommend
         ebData[index2][1] += recommend
 
-  ebData = sorted(ebData, key=lambda x: x[1],reverse=True)
-
   # 관계유사도 순으로 정렬 *관계유사도 : 각 데이터끼리 유사도를 돌린 각각의 합
   settingData = db.execute("""select articleID, titleEb, descriptEb from article""").fetchall()
+  
+  reference = ebData[0][2]
+
+  ebData = sorted(ebData, key=lambda x: x[1],reverse=True)
+
+  return await embedModel(db,titleEbList[reference],settingData,quantity,descriptEbList[reference])
 
   # return embedModel(titleEbList(ebData[0][2]))
   # for i in range(len(ebData)):
