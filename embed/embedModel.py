@@ -1,12 +1,12 @@
 from embed.embedding import similarity, blobToNumpy, embedding
 import json
 
-#target = 검색내용
+#targetEb = 검색내용 (이미 임베딩된)
 #source = DB에 준비된 Data
 #ranged = 검색내용 갯수
-async def embedModel(target, source,ranged):
+async def embedModel(targetEb, source,ranged):
   ebData = []
-  targetEb = await embedding(target)
+  # targetEb = await embedding(target)
   for index,(rssID, titleEb, descriptEb) in enumerate(source):
     titleEb = await blobToNumpy(titleEb)
     descriptEb = await blobToNumpy(descriptEb)
