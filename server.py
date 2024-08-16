@@ -62,6 +62,9 @@ class NewArticle(BaseModel):
     media_thumbnail: Optional[str] = None
     published_parsed: Optional[time.struct_time] = None  # 선택적 속성 추가
 
+    class Config:
+        arbitrary_types_allowed = True
+
 
 class NewArticles(BaseModel):
     data: List[NewArticle]
