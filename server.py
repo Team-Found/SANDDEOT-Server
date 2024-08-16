@@ -15,7 +15,8 @@ from recommend.recommend import recommend
 from db.modules.newArticles import insertNewArticles
 
 # 다른 경로에 있는 모듈 import
-import sys, os
+import sys
+import os
 
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
@@ -96,3 +97,8 @@ class RecommendData(BaseModel):
 @app.post("/article/recommend/")
 async def search_rss(item: RecommendData, db: sqlite3.Cursor = Depends(get_db)):
     return await recommend(item.data, db, item.quantity)
+
+
+# @app.get("/assistant/add/")
+# async def assistant_add():
+#     return assistantAdd()
