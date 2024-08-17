@@ -102,14 +102,26 @@ async def insertRssArticle(entry, rssID: int, rssName: str = None):
     title = entry.title
     # print(title)
     # print(entry.description)
-    description = entry.description if entry.description is not None else entry.summary
+    try:
+        description = entry.description
+    except:
+        try:
+            description = entry.summary
+        except:
+            description = None
+
     description = " ".join(str(await htmlToPlaintext(description)).split()[:40])
     if description == None:
         description = title
 
     writingUrl = entry.link  # 글 링크
     thumbnail = await findImgList(rssName, entry)  # 썸네일과 이미지 리스트 추출
-    published = entry.published_parsed if entry.published_parsed is not None else None
+    # published = entry.published_parsed if entry.published_parsed is not None else None
+    try:
+        published = entry.published_parsed
+    except:
+        published = time.gmtime(time.time())
+
     print(published)
     content = None
     if entry.content is not None:

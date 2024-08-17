@@ -2,6 +2,7 @@
 from typing import List
 from typing import Optional
 from fastapi import FastAPI, Depends, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import time
 import sqlite3
@@ -24,6 +25,15 @@ conn = sqlite3.connect(os.path.abspath("db/server.db"))
 db = conn.cursor()
 
 app = FastAPI()
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/")
