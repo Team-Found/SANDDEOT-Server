@@ -15,6 +15,8 @@ from recommend.recommend import recommend
 
 from db.modules.newArticles import insertNewArticles
 
+from openAI.ai import getAssistant, getThread, startTalk, continueTalk
+
 # 다른 경로에 있는 모듈 import
 import sys
 import os
@@ -72,6 +74,7 @@ class NewArticle(BaseModel):
     link: str
     media_thumbnail: Optional[str] = None
     published_parsed: Optional[time.struct_time] = None  # 선택적 속성 추가
+
     class Config:
         arbitrary_types_allowed = True
 
@@ -106,6 +109,37 @@ class RecommendData(BaseModel):
 @app.post("/article/recommend/")
 async def search_rss(item: RecommendData, db: sqlite3.Cursor = Depends(get_db)):
     return await recommend(item.data, db, item.quantity)
+
+
+@app.get("/ai/getAssistant/")
+async def get_assistant():
+    return {"assistantID": await getAssistant().id}
+
+
+class TalkData(BaseModel):
+    threadID: Optional[str] = None
+    assistantID: str
+    article: Optional[str] = None
+    question: str
+    selection: Optional[str] = None
+
+
+@app.post("/ai/startTalk/")
+async def start_talk(item: TalkData):
+    return {
+        "messages": await startTalk(
+            item.threadID, item.assistantID, item.article, item.question, item.selection
+        )
+    }
+
+
+@app.post("/ai/continueTalk/")
+async def continue_talk(item: TalkData):
+    return {
+        "messages": await continueTalk(
+            item.threadID, item.assistantID, item.article, item.question, item.selection
+        )
+    }
 
 
 # @app.get("/assistant/add/")
