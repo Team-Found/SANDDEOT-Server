@@ -15,7 +15,7 @@ from recommend.recommend import recommend
 
 from db.modules.newArticles import insertNewArticles
 
-from openAI.ai import getAssistant, getThread, startTalk, continueTalk
+from openAI.ai import getAssistant, getThread, startTalk
 
 # 다른 경로에 있는 모듈 import
 import sys
@@ -133,13 +133,13 @@ async def start_talk(item: TalkData):
     }
 
 
-@app.post("/ai/continueTalk/")
-async def continue_talk(item: TalkData):
-    return {
-        "messages": await continueTalk(
-            item.threadID, item.assistantID, item.article, item.question, item.selection
-        )
-    }
+# @app.post("/ai/continueTalk/")
+# async def continue_talk(item: TalkData):
+#     return {
+#         "messages": await continueTalk(
+#             item.threadID, item.assistantID, item.article, item.question, item.selection
+#         )
+#     }
 
 
 # @app.get("/assistant/add/")
