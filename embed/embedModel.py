@@ -16,7 +16,7 @@ async def embedModel(db, targetEb, source, ranged, targetDescriptEb = None, accu
 
     resultEb = await similarity(targetEb, titleEb) + await similarity(targetDescriptEb, descriptEb)
 
-    if result >= accuracy*2:
+    if resultEb >= accuracy*2:
       ebData.append([rssID, resultEb])
   result = sorted(ebData, key=lambda x: x[1],reverse=True)[:ranged]
 
