@@ -2,12 +2,19 @@ from sentence_transformers import SentenceTransformer
 import numpy as np
 import io
 
-model = SentenceTransformer("sentence-transformers/LaBSE")
+model = None
 
 import asyncio
 
+
+def get_model():
+  global model
+  if model is None:
+      model = SentenceTransformer("sentence-transformers/LaBSE")  # 모델을 여기서 로드
+  return model
+
 async def embedding(text):
-  return (model.encode(text))
+  return get_model().encode(text)
 
 async def blobToNumpy(blob):
   if type(blob) == "<class 'bytes'>":
