@@ -2,6 +2,7 @@ import os
 from dotenv import load_dotenv
 import openai
 import time
+import json
 
 load_dotenv()
 
@@ -53,37 +54,37 @@ async def getAssistant():
 
 async def getThread():
     thread = client.beta.threads.create()
-    return thread
+    print(f"Created thread: {thread.id}")  # 스레드 ID 출력
+    return thread.id
 
 
 async def startTalk(threadID, assistantID, article, question: str, selection):
-    if article == None:
+    if article is None:
         return "No article provided"
-    if question == None:
+    if question is None:
         return "No question provided"
-    if not threadID:
+    if threadID is None:
         threadID = await getThread()
         ## 스레드 첫 시작
         client.beta.threads.messages.create(
             thread_id=threadID,
-            role="assistant",
-            content={"HTML": article},
+            role="user",
+            content=json.dumps({"HTML": article}),
         )
 
     # 사용자의 질문 메시지
     client.beta.threads.messages.create(
         thread_id=threadID,
         role="user",
-        content={"question": question, "selection": selection},
+        content=json.dumps({"question": question, "selection": selection}),
     )
 
-    run = client.beta.threads.create_and_run_poll(
+    run = client.beta.threads.runs.create_and_poll(
         thread_id=threadID, assistant_id=assistantID
     )
 
     # 응답 대기 무한루프
     while run.status != "completed":
-        # run = client.beta.threads.polls.get(poll_id=run.id)
         print(run.status)
         time.sleep(1)
 
@@ -92,13 +93,3 @@ async def startTalk(threadID, assistantID, article, question: str, selection):
 
     print(messages)
     return messages
-
-
-# response = openai.ChatCompletion.create(
-#     model=model,
-#     messages=messages,
-#     max_tokens=100  # 응답 길이를 적절히 설정하세요.
-# )
-
-# # 응답 출력
-# print(response.choices[0].message["content"])
