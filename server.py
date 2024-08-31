@@ -113,7 +113,7 @@ async def search_rss(item: RecommendData, db: sqlite3.Cursor = Depends(get_db)):
 
 @app.get("/ai/getAssistant/")
 async def get_assistant():
-    return {"assistantID": await getAssistant().id}
+    return {"assistantID": await getAssistant()}
 
 
 class TalkData(BaseModel):

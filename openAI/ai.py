@@ -39,7 +39,7 @@ async def getAssistant():
         instructions=instruction,
         # tools=[{"type": "retrieval"}],
     )
-    return assistant
+    return assistant.id
 
 
 async def getThread():
