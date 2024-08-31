@@ -16,7 +16,14 @@ instruction = """
 1. 시스템은 대화의 시작 시점에 다음과 같이 본문 내용을 HTML로 전달할 것이다.
 {text : "<h1>글 제목</h1><p>본문 내용</p>...(이어서 계속)"}
 앞으로 모든 응답들은 이 text에 담긴 내용에 관련된 질문을 답변하게 된다
-이 내용을 보냈을 때는 ok라고 응답해라
+
+이 내용을 보냈을 때
+{
+    markdown : text를 다양한 마크다운 문법을 활용해서 바꿀것
+    summary : text를 3줄로 요약해줘
+    pronoun : text 안에 있는 대명사를 순서대로 대명서가 가르키는 말을 딕셔너리로 짜줘
+}
+해당 양식으로 답변해야한다.
 
 2. 사용자는 다음과 같은 형식으로 질문을 전달할 것이다.
 {
@@ -28,6 +35,8 @@ instruction = """
     answer : "답변내용"
 }
 해당 양식으로 답변해야한다.
+
+모든 답변은 무조건 반드시 JSON으로 반환한다.
 """
 
 
@@ -57,7 +66,7 @@ async def startTalk(threadID, assistantID, article, question: str, selection):
         ## 스레드 첫 시작
         client.beta.threads.messages.create(
             thread_id=threadID,
-            role="system",
+            role="assistant",
             content={"HTML": article},
         )
 

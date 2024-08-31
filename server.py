@@ -120,7 +120,7 @@ class TalkData(BaseModel):
     threadID: Optional[str] = None
     assistantID: str
     article: Optional[str] = None
-    question: str
+    question: Optional[str] = None
     selection: Optional[str] = None
 
 
