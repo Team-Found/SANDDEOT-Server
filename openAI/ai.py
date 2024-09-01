@@ -20,7 +20,6 @@ instruction = """
 
 이 내용을 보냈을 때
 {
-    markdown : text를 다양한 마크다운 문법을 활용해서 바꿀것
     summary : text를 3줄로 요약해줘
     pronoun : text 안에 있는 대명사를 순서대로 대명서가 가르키는 말을 딕셔너리로 짜줘
 }
@@ -72,12 +71,13 @@ async def startTalk(threadID, assistantID, article, question: str, selection):
             content=json.dumps({"HTML": article}),
         )
 
-    # 사용자의 질문 메시지
-    client.beta.threads.messages.create(
-        thread_id=threadID,
-        role="user",
-        content=json.dumps({"question": question, "selection": selection}),
-    )
+    if question is not None:
+        ## 사용자의 질문 메시지
+        client.beta.threads.messages.create(
+            thread_id=threadID,
+            role="user",
+            content=json.dumps({"question": question, "selection": selection}),
+        )
 
     run = client.beta.threads.runs.create_and_poll(
         thread_id=threadID, assistant_id=assistantID
@@ -92,4 +92,9 @@ async def startTalk(threadID, assistantID, article, question: str, selection):
     messages = client.beta.threads.messages.list(thread_id=threadID)
 
     print(messages)
+    return messages
+
+
+async def messageHistory(threadID):
+    messages = client.beta.threads.messages.list(thread_id=threadID)
     return messages
