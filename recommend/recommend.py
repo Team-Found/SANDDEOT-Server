@@ -6,9 +6,11 @@ from embed.embedModel import embedModel
 
 async def recommend(data, db, quantity):
   ebData = []
-  for index, rssID in enumerate(data):
-    result = db.execute("""SELECT titleEb, descriptEb FROM article WHERE articleID = ?""",[rssID]).fetchone()
-    ebData.append([rssID, result[0], result[1], 0])
+  exclude = []
+  for index, articleID in enumerate(data):
+    result = db.execute("""SELECT titleEb, descriptEb FROM article WHERE articleID = ?""",[articleID]).fetchone()
+    ebData.append([articleID, result[0], result[1], 0])
+    exclude.append(articleID)
 
   sumSimilar = 0
 
@@ -37,7 +39,7 @@ async def recommend(data, db, quantity):
 
   ebData = sorted(ebData, key=lambda x: x[1],reverse=True)
 
-  return await embedModel(db,titleEbList[reference],settingData,quantity,descriptEbList[reference])
+  return await embedModel(db,titleEbList[reference],settingData,quantity,descriptEbList[reference], exclude=exclude)
 
   # return embedModel(titleEbList(ebData[0][2]))
   # for i in range(len(ebData)):
