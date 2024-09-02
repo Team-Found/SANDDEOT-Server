@@ -123,8 +123,8 @@ async def insertRssArticle(entry, rssID: int, rssName: str = None):
         published = time.gmtime(time.time())
 
     print(published)
-    content = None
-    if entry.content is not None:
+    content = description
+    if entry.content is not None and len(entry.content[0].keys()) > 0:
         content = entry.content[0]["value"]
     db_gen = get_db()
     db = next(db_gen)
