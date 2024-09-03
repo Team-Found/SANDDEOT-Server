@@ -103,7 +103,7 @@ async def send_chatgpt_request(content):
     completion = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
-            {"role": "system", "content": "글을 보내면 다양한 마크다운 문법(최소 3개 이상)을 활용하여 변환한 것을 html으로 변환하여 반환해줘, 반환 시 1. '```html', '줄바꿈 문자 \\n' 같은 건 절대로 넣지마, 2. <body> 안의 html만 보내"},
+            {"role": "system", "content": "html을 보내면 다양한 마크다운 문법(최소 3개 이상)을 활용하여 변환한 것을 html으로 변환하여 반환해줘, 반환 시 1. '```html', '줄바꿈 문자 \\n' 같은 건 절대로 넣지마, 2. <body> 안의 html만 보내"},
             {
                 "role": "user",
                 "content": content

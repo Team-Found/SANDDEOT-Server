@@ -155,6 +155,6 @@ async def get_message_history(threadID: Optional[str] = None):
 class markdownFormatData(BaseModel):
     content : Optional[str] = None
 
-@app.get("/ai/markdownFormat")
+@app.post("/ai/markdownFormat")
 async def markdownFormat(item : markdownFormatData):
     return {"messages": await send_chatgpt_request(item.content)}
