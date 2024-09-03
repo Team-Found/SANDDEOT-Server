@@ -15,7 +15,7 @@ from recommend.recommend import recommend
 
 from db.modules.newArticles import insertNewArticles
 
-from openAI.ai import getAssistant, getThread, startTalk, messageHistory
+from openAI.ai import getAssistant, getThread, startTalk, messageHistory, send_chatgpt_request
 
 # 다른 경로에 있는 모듈 import
 import sys
@@ -151,3 +151,10 @@ async def get_message_history(threadID: Optional[str] = None):
 # @app.get("/assistant/add/")
 # async def assistant_add():
 #     return assistantAdd()
+
+class markdownFormatData(BaseModel):
+    content : Optional[str] = None
+
+@app.get("/ai/markdownFormat")
+async def markdownFormat(item : markdownFormatData):
+    return {"messages": await send_chatgpt_request(item.content)}
