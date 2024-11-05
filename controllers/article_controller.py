@@ -1,0 +1,18 @@
+import sqlite3
+from db.db import get_db
+from fastapi import Depends, HTTPException
+from models import NewArticles, RecommendData
+from services.db.newArticles import insertNewArticles
+from services.db.search import searchSimilar
+from services.recommend.recommend import recommend
+
+class ControllerArticle:
+    async def insert_new_articles(articles: NewArticles, db: sqlite3.Cursor = Depends(get_db)):
+        return await insertNewArticles(articles, db)
+    
+    async def search_rss(target: str, db: sqlite3.Cursor = Depends(get_db), quantity: int = 4):
+        if target:
+            return await searchSimilar(target, db, quantity)
+
+    async def search_rss(item: RecommendData, db: sqlite3.Cursor = Depends(get_db)):
+        return await recommend(item.data, db, item.quantity)

@@ -1,7 +1,7 @@
 from embed.embedding import embedding
-from RSS.htmlToPlaintext import htmlToPlaintext
-from RSS.findImgList import findImgList
-from RSS.findDomain import findDomain
+from rss.htmlToPlaintext import htmlToPlaintext
+from rss.findImgList import findImgList
+from rss.findDomain import findDomain
 import aiohttp  # 비동기 HTTP 클라이언트
 import aiosqlite
 from fastapi import HTTPException
