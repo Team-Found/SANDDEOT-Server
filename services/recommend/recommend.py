@@ -6,6 +6,7 @@ async def recommend(data, db, quantity):
   exclude = []
   for index, articleID in enumerate(data):
     result = db.execute("""SELECT titleEb, descriptEb FROM article WHERE articleID = ?""",[articleID]).fetchone()
+    # print(result)
     ebData.append([articleID, result[0], result[1], 0])
     exclude.append(articleID)
 
