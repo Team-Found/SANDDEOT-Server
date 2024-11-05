@@ -26,31 +26,31 @@ sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 conn = sqlite3.connect(os.path.abspath("db/server.db"))
 db = conn.cursor()
 
-app = FastAPI()
+# app = FastAPI()
 
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=["*"],
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
 
 
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
+# @app.get("/")
+# def read_root():
+#     return {"Hello": "World"}
 
 
-@app.get("/rss/add/")
-async def insert_rss_domain(
-    domain: Optional[str] = None, db: sqlite3.Cursor = Depends(get_db)
-):
-    if domain:
-        return await addRSS(domain, db)
-    else:
-        raise HTTPException(status_code=400, detail="No domain provided")
+# @app.get("/rss/add/")
+# async def insert_rss_domain(
+#     domain: Optional[str] = None, db: sqlite3.Cursor = Depends(get_db)
+# ):
+#     if domain:
+#         return await addRSS(domain, db)
+#     else:
+#         raise HTTPException(status_code=400, detail="No domain provided")
 
 
 # class NewArticle(BaseModel):
@@ -101,9 +101,9 @@ async def insert_rss_domain(
 #     return await recommend(item.data, db, item.quantity)
 
 
-@app.get("/ai/getAssistant/")
-async def get_assistant():
-    return {"assistantID": await getAssistant()}
+# @app.get("/ai/getAssistant/")
+# async def get_assistant():
+#     return {"assistantID": await getAssistant()}
 
 
 # class TalkData(BaseModel):
@@ -114,19 +114,19 @@ async def get_assistant():
 #     selection: Optional[str] = None
 
 
-@app.post("/ai/startTalk/")
-async def start_talk(item: TalkData):
-    print(item)
-    return {
-        "messages": await startTalk(
-            item.threadID, item.assistantID, item.article, item.question, item.selection
-        )
-    }
+# @app.post("/ai/startTalk/")
+# async def start_talk(item: TalkData):
+#     print(item)
+#     return {
+#         "messages": await startTalk(
+#             item.threadID, item.assistantID, item.article, item.question, item.selection
+#         )
+#     }
 
 
-@app.get("/ai/getMessageHistory/")
-async def get_message_history(threadID: Optional[str] = None):
-    return {"messages": await messageHistory(threadID)}
+# @app.get("/ai/getMessageHistory/")
+# async def get_message_history(threadID: Optional[str] = None):
+#     return {"messages": await messageHistory(threadID)}
 
 
 # @app.post("/ai/continueTalk/")
@@ -145,6 +145,6 @@ async def get_message_history(threadID: Optional[str] = None):
 # class markdownFormatData(BaseModel):
 #     content : Optional[str] = None
 
-@app.post("/ai/markdownFormat")
-async def markdownFormat(item : markdownFormatData):
-    return {"messages": await send_chatgpt_request(item.content)}
+# @app.post("/ai/markdownFormat")
+# async def markdownFormat(item : markdownFormatData):
+#     return {"messages": await send_chatgpt_request(item.content)}

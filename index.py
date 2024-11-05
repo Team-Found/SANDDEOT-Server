@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from routes import ai, article, rss
 
 app = FastAPI()
 
@@ -15,4 +16,6 @@ app.add_middleware(
 def root():
     return {"message": "Hello, FastAPI!"}
 
-# @app.include_router()
+app.include_router(ai.router)
+app.include_router(article.router)
+app.include_router(rss.router)
