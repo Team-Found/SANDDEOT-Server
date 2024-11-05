@@ -7,12 +7,12 @@ from pydantic import BaseModel
 import time
 import sqlite3
 import asyncio
+
 from embed.embedModel import embedModel
 from db.modules.AddRSS import addRSS
 from db.db import get_db
 from db.modules.search import searchSimilar
 from recommend.recommend import recommend
-
 from db.modules.newArticles import insertNewArticles
 
 from openAI.ai import getAssistant, getThread, startTalk, messageHistory, send_chatgpt_request
@@ -43,16 +43,6 @@ def read_root():
     return {"Hello": "World"}
 
 
-@app.get("/items/{any}")
-def read_item(any: str):
-    print("Input: ", any)
-    start = time.time()
-    data = embedModel(any)
-    end = time.time()
-    print("Time taken: ", end - start)
-    return {"data": data}
-
-
 @app.get("/rss/add/")
 async def insert_rss_domain(
     domain: Optional[str] = None, db: sqlite3.Cursor = Depends(get_db)
@@ -63,52 +53,52 @@ async def insert_rss_domain(
         raise HTTPException(status_code=400, detail="No domain provided")
 
 
-class NewArticle(BaseModel):
-    articleID: Optional[int] = None
-    rssID: int
-    title: str
-    description: Optional[str] = None
-    summary: Optional[str] = None
-    date: int  # unix timestamp
-    content: List[dict]
-    link: str
-    media_thumbnail: Optional[str] = None
-    published_parsed: Optional[time.struct_time] = None  # 선택적 속성 추가
+# class NewArticle(BaseModel):
+#     articleID: Optional[int] = None
+#     rssID: int
+#     title: str
+#     description: Optional[str] = None
+#     summary: Optional[str] = None
+#     date: int  # unix timestamp
+#     content: List[dict]
+#     link: str
+#     media_thumbnail: Optional[str] = None
+#     published_parsed: Optional[time.struct_time] = None  # 선택적 속성 추가
 
-    class Config:
-        arbitrary_types_allowed = True
-
-
-class NewArticles(BaseModel):
-    data: List[NewArticle]
+#     class Config:
+#         arbitrary_types_allowed = True
 
 
-@app.post("/article/newArticles/")
-async def insert_new_articles(
-    articles: NewArticles, db: sqlite3.Cursor = Depends(get_db)
-):
-    if articles:
-        return await insertNewArticles(articles, db)
-    else:
-        raise HTTPException(status_code=400, detail="No articles provided")
+# class NewArticles(BaseModel):
+#     data: List[NewArticle]
 
 
-@app.get("/article/search/")
-async def search_rss(
-    target: str, db: sqlite3.Cursor = Depends(get_db), quantity: int = 4
-):
-    if target:
-        return await searchSimilar(target, db, quantity)
+# @app.post("/article/newArticles/")
+# async def insert_new_articles(
+#     articles: NewArticles, db: sqlite3.Cursor = Depends(get_db)
+# ):
+#     if articles:
+#         return await insertNewArticles(articles, db)
+#     else:
+#         raise HTTPException(status_code=400, detail="No articles provided")
 
 
-class RecommendData(BaseModel):
-    data: List[int]
-    quantity: int
+# @app.get("/article/search/")
+# async def search_rss(
+#     target: str, db: sqlite3.Cursor = Depends(get_db), quantity: int = 4
+# ):
+#     if target:
+#         return await searchSimilar(target, db, quantity)
 
 
-@app.post("/article/recommend/")
-async def search_rss(item: RecommendData, db: sqlite3.Cursor = Depends(get_db)):
-    return await recommend(item.data, db, item.quantity)
+# class RecommendData(BaseModel):
+#     data: List[int]
+#     quantity: int
+
+
+# @app.post("/article/recommend/")
+# async def search_rss(item: RecommendData, db: sqlite3.Cursor = Depends(get_db)):
+#     return await recommend(item.data, db, item.quantity)
 
 
 @app.get("/ai/getAssistant/")
@@ -116,12 +106,12 @@ async def get_assistant():
     return {"assistantID": await getAssistant()}
 
 
-class TalkData(BaseModel):
-    threadID: Optional[str] = None
-    assistantID: str
-    article: Optional[str] = None
-    question: Optional[str] = None
-    selection: Optional[str] = None
+# class TalkData(BaseModel):
+#     threadID: Optional[str] = None
+#     assistantID: str
+#     article: Optional[str] = None
+#     question: Optional[str] = None
+#     selection: Optional[str] = None
 
 
 @app.post("/ai/startTalk/")
@@ -152,8 +142,8 @@ async def get_message_history(threadID: Optional[str] = None):
 # async def assistant_add():
 #     return assistantAdd()
 
-class markdownFormatData(BaseModel):
-    content : Optional[str] = None
+# class markdownFormatData(BaseModel):
+#     content : Optional[str] = None
 
 @app.post("/ai/markdownFormat")
 async def markdownFormat(item : markdownFormatData):

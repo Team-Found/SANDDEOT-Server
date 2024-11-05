@@ -2,5 +2,5 @@ from pydantic import BaseModel
 from typing import Optional
 
 
-class markdownFormatData(BaseModel):
+class MarkdownFormatData(BaseModel):
     content : Optional[str] = None
