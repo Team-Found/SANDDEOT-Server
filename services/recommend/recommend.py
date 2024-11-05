@@ -1,5 +1,5 @@
-from embed.embedding import similarity, blobToNumpy
-from embed.embedModel import embedModel
+from services.embed.embedding import similarity, blobToNumpy
+from services.embed.embedModel import embedModel
 
 async def recommend(data, db, quantity):
   ebData = []

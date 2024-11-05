@@ -20,12 +20,12 @@ async def insert_new_articles(articles: NewArticles, db: sqlite3.Cursor = Depend
 
 
 @router.get("/article/search/", tags=["article"])
-async def search_rss(target: str, db: sqlite3.Cursor = Depends(get_db), quantity: int = 4):
+async def search_rss(target: str, quantity: int = 4):
     if target:
-        return await controllerArticle.searchSimilar(target, db, quantity)
+        return await controllerArticle.search_rss(target, db, quantity)
     else:
         raise HTTPException(status_code=400, detail="No articles provided")
 
 @router.post("/article/recommend/")
-async def search_rss(item: RecommendData, db: sqlite3.Cursor = Depends(get_db)):
-    return await controllerArticle.recommend(item.data, db, item.quantity)
+async def recommend_article(item: RecommendData, db: sqlite3.Cursor = Depends(get_db)):
+    return await controllerArticle.recommend_article(item.data, db, item.quantity)

@@ -2,7 +2,7 @@ import sqlite3
 from fastapi import APIRouter, Depends, HTTPException
 from typing import Optional
 from db.db import get_db
-
+from services.db.AddRSS import addRSS
 router = APIRouter()
 
 @router.get("/rss/add", tags=["users"])

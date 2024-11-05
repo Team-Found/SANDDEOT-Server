@@ -1,4 +1,4 @@
-from embed.embedding import similarity, blobToNumpy, embedding
+from services.embed.embedding import similarity, blobToNumpy, embedding
 import json
 
 #targetEb = 검색내용 (이미 임베딩된)

@@ -90,7 +90,7 @@ async def startTalk(threadID, assistantID, article, question: str, selection):
     # 응답 메시지
     messages = client.beta.threads.messages.list(thread_id=threadID)
 
-    print(messages)
+    # print(messages)
     return messages
 
 

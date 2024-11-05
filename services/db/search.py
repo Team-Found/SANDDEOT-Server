@@ -1,7 +1,7 @@
 import sqlite3
 import sys, os
-from embed.embedModel import embedModel
-from embed.embedding import embedding
+from services.embed.embedModel import embedModel
+from services.embed.embedding import embedding
 import json
 
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))

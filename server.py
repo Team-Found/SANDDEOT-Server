@@ -1,30 +1,30 @@
-# FAST API Import For Set UP
-from typing import List
-from typing import Optional
-from fastapi import FastAPI, Depends, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-import time
-import sqlite3
-import asyncio
+# # FAST API Import For Set UP
+# from typing import List
+# from typing import Optional
+# from fastapi import FastAPI, Depends, HTTPException
+# from fastapi.middleware.cors import CORSMiddleware
+# from pydantic import BaseModel
+# import time
+# import sqlite3
+# import asyncio
 
-from embed.embedModel import embedModel
-from db.modules.AddRSS import addRSS
-from db.db import get_db
-from db.modules.search import searchSimilar
-from recommend.recommend import recommend
-from db.modules.newArticles import insertNewArticles
+# from embed.embedModel import embedModel
+# from db.modules.AddRSS import addRSS
+# from db.db import get_db
+# from db.modules.search import searchSimilar
+# from recommend.recommend import recommend
+# from db.modules.newArticles import insertNewArticles
 
-from openAI.ai import getAssistant, getThread, startTalk, messageHistory, send_chatgpt_request
+# from openAI.ai import getAssistant, getThread, startTalk, messageHistory, send_chatgpt_request
 
-# 다른 경로에 있는 모듈 import
-import sys
-import os
+# # 다른 경로에 있는 모듈 import
+# import sys
+# import os
 
-sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+# sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
-conn = sqlite3.connect(os.path.abspath("db/server.db"))
-db = conn.cursor()
+# conn = sqlite3.connect(os.path.abspath("db/server.db"))
+# db = conn.cursor()
 
 # app = FastAPI()
 

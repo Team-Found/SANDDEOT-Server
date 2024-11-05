@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
-from RSS.githubImg import findGithubThumbnail
-from RSS.findThumbnail import findThumbnail
+from services.rss.githubImg import findGithubThumbnail
+from services.rss.findThumbnail import findThumbnail
 
 import asyncio
 

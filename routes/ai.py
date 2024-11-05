@@ -16,12 +16,12 @@ async def get_assistant():
 
 @router.post("/ai/startTalk/")
 async def start_talk(item: TalkData):
-    return await controller.start_talk()
+    return await controller.start_talk(item)
 
 @router.get("/ai/getMessageHistory/")
 async def get_message_history(threadID: Optional[str] = None):
-    return await controller.get_message_history()
+    return await controller.get_message_history(threadID)
 
 @router.post("/ai/markdownFormat")
 async def markdownFormat(item : MarkdownFormatData):
-    return await controller.send_chatgpt_request(item.content)
+    return await controller.markdown_format(item.content)

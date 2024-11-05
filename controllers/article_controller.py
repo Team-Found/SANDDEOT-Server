@@ -10,9 +10,8 @@ class ControllerArticle:
     async def insert_new_articles(articles: NewArticles, db: sqlite3.Cursor = Depends(get_db)):
         return await insertNewArticles(articles, db)
     
-    async def search_rss(target: str, db: sqlite3.Cursor = Depends(get_db), quantity: int = 4):
-        if target:
-            return await searchSimilar(target, db, quantity)
+    async def search_rss(target: str, quantity: int = 4, db: sqlite3.Cursor = Depends(get_db)):
+        return await searchSimilar(target, db, quantity)
 
-    async def search_rss(item: RecommendData, db: sqlite3.Cursor = Depends(get_db)):
-        return await recommend(item.data, db, item.quantity)
+    async def recommend_article(data, db, quantity):
+        return await recommend(data, db, quantity)

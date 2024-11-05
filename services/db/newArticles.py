@@ -5,7 +5,7 @@ import queue
 import threading
 import asyncio
 import time
-from db.modules.AddRSS import insertRssArticle
+from services.db.AddRSS import insertRssArticle
 # from db.modules.AddRSS import process_queue
 
 # 큐 생성
