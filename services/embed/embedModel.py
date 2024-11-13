@@ -7,11 +7,9 @@ import json
 
 #타겟Eb와 유사한 range개의 값을 반환하는 함수
 async def embedModel(db, targetEb, source, ranged, targetDescriptEb = None, accuracy = 0, exclude = []):
-  if targetDescriptEb is None:
-    targetDescriptEb = targetEb
+  if targetDescriptEb is None: targetDescriptEb = targetEb
 
   ebData = []
-  # targetEb = await embedding(target)
   for index,(articleID, titleEb, descriptEb) in enumerate(source):
     if articleID in exclude:
       continue

@@ -11,7 +11,7 @@ from models.RecommendData import RecommendData
 from controllers.article_controller import ControllerArticle
 controllerArticle = ControllerArticle()
 
-@router.get("/article/newArticles/", tags=["article"])
+@router.post("/article/newArticles/", tags=["article"])
 async def insert_new_articles(articles: NewArticles, db: sqlite3.Cursor = Depends(get_db)):
     if articles:
         return await controllerArticle.insert_new_articles(articles, db)
