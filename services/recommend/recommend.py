@@ -11,7 +11,7 @@ async def recommend(data, db, quantity):
   listScale = list(map(lambda x:x[1], data))
   maxScale = max(listScale)
   minScale = min(listScale)
-  Normalization = lambda x : (x - minScale)/ (maxScale - minScale)
+  Normalization = lambda x : (x - minScale)/ ((maxScale - minScale)+0.1)
 
   for index, (articleID, tos) in enumerate(data): #tos = Time Of Stay
     result = db.execute("""SELECT titleEb, descriptEb FROM article WHERE articleID = ?""",[articleID]).fetchone()
