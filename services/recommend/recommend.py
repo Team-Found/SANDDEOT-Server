@@ -17,8 +17,8 @@ async def recommend(data, db, quantity):
     result = db.execute("""SELECT titleEb, descriptEb FROM article WHERE articleID = ?""",[articleID]).fetchone()
     titleEbList.append(await blobToNumpy(result[0]))
     descriptEbList.append(await blobToNumpy(result[1]))
-    # print(Normalization(tos))
-    ebData.append([articleID,  bn , index])
+    print(Normalization(tos))
+    ebData.append([articleID, Normalization(tos), index])
     exclude.append(articleID)
   
   sumSimilar = 0
