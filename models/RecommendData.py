@@ -3,5 +3,5 @@ from typing import List
 from typing import Optional
 
 class RecommendData(BaseModel):
-    data: List[int]
+    data: List[List[int]]
     quantity: int

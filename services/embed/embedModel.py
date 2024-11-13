@@ -4,6 +4,8 @@ import json
 #targetEb = 검색내용 (이미 임베딩된)
 #source = DB에 준비된 Data
 #ranged = 검색내용 갯수
+
+#타겟Eb와 유사한 range개의 값을 반환하는 함수
 async def embedModel(db, targetEb, source, ranged, targetDescriptEb = None, accuracy = 0, exclude = []):
   if targetDescriptEb is None:
     targetDescriptEb = targetEb

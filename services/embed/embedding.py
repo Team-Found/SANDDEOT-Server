@@ -6,7 +6,6 @@ model = None
 
 import asyncio
 
-
 def get_model():
   global model
   if model is None:

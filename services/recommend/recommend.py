@@ -4,27 +4,29 @@ from services.embed.embedModel import embedModel
 async def recommend(data, db, quantity):
   ebData = []
   exclude = []
-  for index, articleID in enumerate(data):
-    result = db.execute("""SELECT titleEb, descriptEb FROM article WHERE articleID = ?""",[articleID]).fetchone()
-    # print(result)
-    ebData.append([articleID, result[0], result[1], 0])
-    exclude.append(articleID)
-
-  sumSimilar = 0
 
   titleEbList = []
   descriptEbList = []
 
-  for index, (rssID, titleEb, descriptEb, weight) in enumerate(ebData):
-    titleEbList.append(await blobToNumpy(titleEb))
-    descriptEbList.append(await blobToNumpy(descriptEb))
-    ebData[index].insert(4, index)
-    del ebData[index][1]
-    del ebData[index][1]
+  listScale = list(map(lambda x:x[1], data))
+  maxScale = max(listScale)
+  minScale = min(listScale)
+  Normalization = lambda x : (x - minScale)/ (maxScale - minScale)
 
-  for index, (rssID, weight, reference) in enumerate(ebData):
-    for index2, (rssID2, weight2, reference2) in enumerate(ebData):
-      if index != index2:
+  for index, (articleID, tos) in enumerate(data): #tos = Time Of Stay
+    result = db.execute("""SELECT titleEb, descriptEb FROM article WHERE articleID = ?""",[articleID]).fetchone()
+    titleEbList.append(await blobToNumpy(result[0]))
+    descriptEbList.append(await blobToNumpy(result[1]))
+    # print(Normalization(tos))
+    ebData.append([articleID,  bn , index])
+    exclude.append(articleID)
+  
+  sumSimilar = 0
+
+
+  for index, (articleID, weight, reference) in enumerate(ebData):
+    for index2, (articleID2, weight2, reference2) in enumerate(ebData):
+      if index != index2: 
         recommend = await similarity(titleEbList[index],titleEbList[index2]) + await similarity(descriptEbList[index],descriptEbList[index2])
         sumSimilar += recommend
         ebData[index][1] += recommend
