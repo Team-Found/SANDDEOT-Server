@@ -71,14 +71,15 @@ async def startTalk(threadID, assistantID, article, question: str, selection):
         role="user",
         content=json.dumps({"HTML": article}),
     )
-
-  if question is not None:
+  elif question is not None:
     # 사용자의 질문 메시지
     await client.beta.threads.messages.create(
         thread_id=threadID,
         role="user",
         content=json.dumps({"question": question, "selection": selection}),
     )
+
+  await asyncio.sleep(1)
 
   run = await client.beta.threads.runs.create(
       thread_id=threadID, assistant_id=assistantID
