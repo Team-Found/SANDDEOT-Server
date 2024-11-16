@@ -113,7 +113,7 @@ async def messageHistory(threadID):
 
 
 async def send_chatgpt_request(content):
-  completion = client.chat.completions.create(
+  completion = await client.chat.completions.create(
       model="gpt-3.5-turbo",
       messages=[
           {"role": "system",
